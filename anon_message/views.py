@@ -52,6 +52,7 @@ class RetrieveMessagesView(APIView):
             # Retrieve messages within the allowed timeframe
             messages = AnonMessage.objects.filter(
                 receiver=receiver,
+                is_visible=True,
                 created_at__gte=now() - timedelta(hours=36), 
                 created_at__lte=now() - timedelta(seconds=0) 
             )
@@ -61,3 +62,34 @@ class RetrieveMessagesView(APIView):
             return Response(serializer.data)
         except (ValidationError, IndexError, KeyError):
             return Response({"error": "Invalid tokens"}, status=status.HTTP_400_BAD_REQUEST)
+
+# Message Deletion
+class DeleteMessageView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, message_id):
+        try:
+            # Get the message
+            message = get_object_or_404(AnonMessage, id=message_id)
+
+            # Check if the requester is the receiver (owner) of the message
+            if message.receiver != request.user:
+                return Response(
+                    {'error': 'You do not have permission to delete this message.'}, 
+                    status=status.HTTP_403_FORBIDDEN
+                )
+
+            # Soft delete the message
+            message.is_visible = False
+            message.save()
+
+            return Response(
+                {'message': 'Message deleted successfully.'}, 
+                status=status.HTTP_200_OK
+            )
+
+        except Exception as e:
+            return Response(
+                {'error': 'An unexpected error occurred.'}, 
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )

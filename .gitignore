@@ -1,0 +1,49 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+FRONTEND_INTEGRATION.md
+
+# venv
+lemonenv
+venv/
+.venv/
+.env/
+env/
+
+# Django Specific
+*.sqlite3
+*.db
+local_settings.py
+media/
+static/
+*.log
+*.pot
+.env
+db.sqlite3
+*.sqlite3
+
+# IDE
+.idea/
+*.swp
+*.swo
+*.DS_Store
+Thumbs.db
+
+# OS
+.vscode/
+.DS_Store
+
+# Package Distributions
+dist/
+build/
+*.egg-info/
+
+# Coverage Data
+.coverage
+coverage.xml
+
+# Temporary Files
+*.tmp
+*.bak
+*.orig

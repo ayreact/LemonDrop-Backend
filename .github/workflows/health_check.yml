@@ -1,0 +1,17 @@
+name: Health Check Pinger
+
+on:
+  schedule:
+    # Run every 3 minutes
+    - cron: '*/3 * * * *'
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  ping_health:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Health Endpoint
+        run: |
+          curl -X GET "${{ secrets.SITE_BASE_URL }}/messages/health/" \
+          --fail \
+          --verbose

@@ -79,8 +79,8 @@ class LoginView(APIView):
                 key="refresh_token",
                 value=tokens["refresh"],
                 httponly=True,
-                secure=settings.DEBUG is False,  # Secure in production
-                samesite="Lax",  # Adjust based on frontend/backend setup
+                secure=settings.USE_HTTPS,  # Secure cookie if using HTTPS
+                samesite="None",  # Adjust based on frontend/backend setup
                 max_age=int(timedelta(days=7).total_seconds())  # Expiry in 7 days
             )
 

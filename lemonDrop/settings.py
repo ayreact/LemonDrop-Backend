@@ -28,6 +28,8 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG")
 
+USE_HTTPS = os.getenv("USE_HTTPS", "False").lower() == "true"
+
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
 SITE_BASE_URL = os.getenv("SITE_BASE_URL")
 
@@ -114,16 +116,9 @@ SIMPLE_JWT = {
     "SIGNING_KEY": os.getenv("JWT_SECRET"),
 }
 
-CORS_ALLOW_ALL_ORIGINS = True
-# CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", "").split(",")
-
-# CSRF_TRUSTED_ORIGINS = CORS_ALLOWED_ORIGINS
-
-CSRF_TRUSTED_ORIGINS = [
-    'https://*.127.0.0.1',
-    'https://*', 
-    'http://*'
-]
+CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", "").split(",")
+CORS_ALLOW_CREDENTIALS = True
+CSRF_TRUSTED_ORIGINS = CORS_ALLOWED_ORIGINS
 
 ACCOUNT_AUTHENTICATION_METHODS = "email"
 ACCOUNT_EMAIL_REQUIRED = True

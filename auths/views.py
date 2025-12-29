@@ -46,7 +46,7 @@ class RegisterView(APIView):
                 value=tokens["refresh"],
                 httponly=True,  # Prevent access from JavaScript
                 secure=settings.USE_HTTPS,  # Secure cookie if using HTTPS
-                samesite="Lax",  # Adjust as needed for cross-site requests
+                samesite="None", 
                 max_age=int(timedelta(days=7).total_seconds()),  # Set expiry (7 days)
             )
 

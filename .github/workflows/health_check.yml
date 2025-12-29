@@ -3,7 +3,7 @@ name: Health Check Pinger
 on:
   schedule:
     # Run every 3 minutes
-    - cron: '*/3 * * * *'
+    - cron: '*/5 * * * *'
   workflow_dispatch:  # Allow manual trigger
 
 jobs:

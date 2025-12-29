@@ -82,7 +82,7 @@ def google_callback(request):
         str(refresh),
         httponly=True,
         secure=False,  # Set to False for local testing, True for production with HTTPS
-        samesite="Lax",
+        samesite="None",
         max_age=60 * 60 * 24 * 7,  # 7 days
     )
 	

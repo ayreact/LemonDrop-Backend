@@ -81,7 +81,7 @@ def google_callback(request):
         "refresh_token",
         str(refresh),
         httponly=True,
-        secure=False,  # Set to False for local testing, True for production with HTTPS
+        secure=settings.USE_HTTPS,  # Set to False for local testing, True for production with HTTPS
         samesite="None",
         max_age=60 * 60 * 24 * 7,  # 7 days
     )

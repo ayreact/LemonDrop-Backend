@@ -24,18 +24,53 @@ class NewMessageView(APIView):
     def post(self, request, username):
         receiver = get_object_or_404(User, username=username)
 
-        message_content = request.data.get('message')
+        serializer = AnonMessageSerializer(data=request.data)
+        
+        if serializer.is_valid():
+            serializer.save(receiver=receiver)
+            return Response({'message': f'Message sent successfully to {receiver.username}!'}, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        if not message_content:
-            return Response({'error': 'Please type a message!'}, status=status.HTTP_400_BAD_REQUEST)
+# Message Reply
+from .serializers import MessageReplySerializer
+from .models import MessageReply
+from .utils import send_reply_email
 
-        new_message = AnonMessage.objects.create(
-            message_content=message_content,
-            receiver=receiver
-        )
-        new_message.save()
-        return Response({'message': f'Message sent successfully to {receiver.username}!'}, status=status.HTTP_201_CREATED)
-    
+class ReplyMessageView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, message_id):
+        # Get the original message
+        original_message = get_object_or_404(AnonMessage, id=message_id)
+
+        # Check if user is the receiver of the message
+        if original_message.receiver != request.user:
+            return Response({'error': 'You can only reply to your own messages.'}, status=status.HTTP_403_FORBIDDEN)
+
+        # Check if message has a sender email
+        if not original_message.sender_email:
+            return Response({'error': 'This message does not have a return address.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Check if already replied
+        if hasattr(original_message, 'reply'):
+             return Response({'error': 'You have already replied to this message.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = MessageReplySerializer(data=request.data)
+        if serializer.is_valid():
+            reply = serializer.save(message=original_message)
+            
+            # Send email
+            email_sent = send_reply_email(reply)
+            
+            msg = 'Reply sent successfully!'
+            if not email_sent:
+                msg += ' (Email delivery failed, but reply saved)'
+
+            return Response({'message': msg}, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 # Message Retrieval
 class RetrieveMessagesView(APIView):
     permission_classes = [IsAuthenticated]

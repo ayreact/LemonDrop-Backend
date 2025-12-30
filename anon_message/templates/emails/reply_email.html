@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .header h2 {
+            color: #FFD700; /* Lemon color */
+            margin: 0;
+        }
+        .message-box {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-left: 4px solid #FFD700;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        .reply-box {
+            background-color: #e8f4fd;
+            padding: 15px;
+            border-left: 4px solid #2196F3;
+            border-radius: 4px;
+        }
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #aaa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>LemonDrop Reply</h2>
+        </div>
+        
+        <p>You received a reply from <strong>{{ username }}</strong>!</p>
+        
+        <p><strong>Your Message:</strong></p>
+        <div class="message-box">
+            {{ original_message }}
+        </div>
+        
+        <p><strong>Reply:</strong></p>
+        <div class="reply-box">
+            {{ reply_content }}
+        </div>
+        
+        <div class="footer">
+            <p>Sent via LemonDrop - Anonymous Messaging</p>
+        </div>
+    </div>
+</body>
+</html>
